@@ -14,4 +14,6 @@ class Categoria extends Model
         return $this->belongsToMany(Disfraz::class)
             ->withTimestamps();
     }
+
+    protected $fillable = ['nombre', 'descripcion'];
 }

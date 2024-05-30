@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\DisfrazController;
+use App\Models\Disfraz;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +19,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('template');
 });
+
+Route::view('/panel', 'panel.index')->name('panel');
+
+Route::resources([
+    'categorias' => CategoriaController::class,
+    'disfrazs' => DisfrazController::class
+]);
 
 Route::get('/login', function () {
     return view('auth.login');

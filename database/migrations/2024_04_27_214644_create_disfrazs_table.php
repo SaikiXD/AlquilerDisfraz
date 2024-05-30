@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('disfrazs', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->text('descripcion')->nullable();
             $table->integer('nroPiezas');
             $table->string('color');
             $table->string('genero');
-            $table->string('talla');
+            //$table->string('talla');
             $table->integer('edad_min');
             $table->integer('edad_max');
             $table->integer('precio');
