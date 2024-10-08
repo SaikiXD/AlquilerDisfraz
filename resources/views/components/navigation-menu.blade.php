@@ -52,6 +52,7 @@
                                 </nav>
                             </div--->
                     <div class="sb-sidenav-menu-heading">Modulos</div>
+                    <!----Ventas---->
                     <a class="nav-link" href="{{ route('categorias.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
                         Categorias
@@ -60,10 +61,23 @@
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-shirt"></i></div>
                         Disfraces
                     </a>
-                    <a class="nav-link" href="tables.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Tables
+                    <a class="nav-link" href="{{ route('clientes.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                        Clientes
                     </a>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseVentas" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                        Alquiler
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseVentas" aria-labelledby="headingOne"
+                        data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="{{ route('ventas.index') }}">Ver</a>
+                            <a class="nav-link" href="{{ route('ventas.create') }}">Crear</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
             <div class="sb-sidenav-footer">

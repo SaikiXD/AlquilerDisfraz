@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\clienteController;
 use App\Http\Controllers\DisfrazController;
+use App\Http\Controllers\VentaController;
 use App\Models\Disfraz;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +26,9 @@ Route::view('/panel', 'panel.index')->name('panel');
 
 Route::resources([
     'categorias' => CategoriaController::class,
-    'disfrazs' => DisfrazController::class
+    'disfrazs' => DisfrazController::class,
+    'clientes' => ClienteController::class,
+    'ventas' => VentaController::class
 ]);
 
 Route::get('/login', function () {

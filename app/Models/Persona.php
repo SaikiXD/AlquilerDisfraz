@@ -9,11 +9,14 @@ class Persona extends Model
 {
     use HasFactory;
 
-    public function cliente(){
+    public function cliente()
+    {
         return $this->hasOne(Cliente::class);
     }
-    
-    public function user(){
+
+    public function user()
+    {
         return $this->hasOne(User::class);
     }
+    protected $fillable = ['nombre', 'gmail', 'direccion', 'celular'];
 }

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('alquiler_id')->constrained('alquilers')->onDelete('cascade');
             $table->foreignId('disfraz_id')->constrained('disfrazs')->onDelete('cascade');
             $table->integer('cantidad');
-            $table->integer('precio_venta');
             $table->timestamps();
         });
     }

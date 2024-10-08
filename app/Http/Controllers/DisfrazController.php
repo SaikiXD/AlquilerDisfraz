@@ -2,8 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreDisfrazRequest;
+use App\Http\Requests\UpdateDisfrazRequest;
 use App\Models\Categoria;
+use App\Models\Disfraz;
 use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\TryCatch;
 
 class DisfrazController extends Controller
 {
@@ -12,7 +20,8 @@ class DisfrazController extends Controller
      */
     public function index()
     {
-        return view('disfraz.index');
+        $disfrazs = Disfraz::with(['categorias'])->latest()->get();
+        return view('disfraz.index', compact('disfrazs'));
     }
 
     /**
@@ -26,56 +35,100 @@ class DisfrazController extends Controller
         return view('disfraz.create', compact('categorias'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreDisfrazRequest $request)
     {
-        // Validación
-        $validated = $request->validate([
-            'edad_minima' => 'required|integer|min:0|max:120',
-            'edad_maxima' => 'required|integer|min:0|max:120|gte:edad_minima',
-        ], [
-            'edad_minima.required' => 'La edad mínima es requerida.',
-            'edad_minima.integer' => 'La edad mínima debe ser un número entero.',
-            'edad_minima.min' => 'La edad mínima no puede ser negativa.',
-            'edad_minima.max' => 'La edad mínima no puede ser mayor que 120.',
-            'edad_maxima.required' => 'La edad máxima es requerida.',
-            'edad_maxima.integer' => 'La edad máxima debe ser un número entero.',
-            'edad_maxima.min' => 'La edad máxima no puede ser negativa.',
-            'edad_maxima.max' => 'La edad máxima no puede ser mayor que 120.',
-            'edad_maxima.gte' => 'La edad máxima debe ser mayor o igual que la edad mínima.',
-            'precio.required' => 'El precio es requerido.',
-            'precio.numeric' => 'El precio debe ser un valor numérico.',
-            'precio.min' => 'El precio no puede ser negativo.',
-            'cantidad.required' => 'La cantidad es requerida.',
-            'cantidad.integer' => 'La cantidad debe ser un número entero.',
-            'cantidad.min' => 'La cantidad no puede ser negativa.',
-        ]);
+        try {
+            DB::beginTransaction();
+            //disfraz
+            $disfraz = new Disfraz();
+            if ($request->hasFile('img_path')) {
+                $name = $disfraz->hanbleUploadImage($request->file('img_path'));
+            } else {
+                $name = null;
+            }
+            $disfraz->fill([
+                'nombre' => $request->nombre,
+                'nroPiezas' => $request->nroPiezas,
+                'cantidad' => $request->cantidad,
+                'descripcion' => $request->descripcion,
+                'img_path' => $name,
+                'color' => $request->color,
+                'edad_min' => $request->edad_min,
+                'edad_max' => $request->edad_max,
+                'precio' => $request->precio,
+                'genero' => $request->genero,
+            ]);
+            $disfraz->save();
+
+            //disfraz-categorias
+            $categorias = $request->get('categorias');
+            $disfraz->categorias()->attach($categorias);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error('Error al crear disfraz: ' . $e->getMessage());
+            return redirect()->route('disfrazs.index')->with('error', 'Error al registrar disfraz');
+        }
+        return redirect()->route('disfrazs.index')->with('success', 'Disfraz registrado');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function edit(Disfraz $disfraz)
     {
-        //
+        // Obtener todas las categorías activas
+        $categorias = Categoria::where('estado', 1)->get();
+        return view('disfraz.edit', compact('disfraz', 'categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateDisfrazRequest $request, Disfraz $disfraz)
     {
-        //
+        try {
+            DB::beginTransaction();
+            if ($request->hasFile('img_path')) {
+                $name = $disfraz->hanbleUploadImage($request->file('img_path'));
+
+                //Eliminar imagen
+
+                if (Storage::disk('public')->exists('disfrazs/' . $disfraz->img_path)) {
+                    Storage::disk('public')->delete('disfrazs/' . $disfraz->img_path);
+                }
+            } else {
+                $name = $disfraz->img_path;
+            }
+            $disfraz->fill([
+                'nombre' => $request->nombre,
+                'nroPiezas' => $request->nroPiezas,
+                'cantidad' => $request->cantidad,
+                'descripcion' => $request->descripcion,
+                'img_path' => $name,
+                'color' => $request->color,
+                'edad_min' => $request->edad_min,
+                'edad_max' => $request->edad_max,
+                'precio' => $request->precio,
+                'genero' => $request->genero,
+            ]);
+            $disfraz->save();
+
+            //disfraz-categorias
+            $categorias = $request->get('categorias');
+            $disfraz->categorias()->sync($categorias);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+
+        return redirect()->route('disfrazs.index')->with('success', 'Disfraz editado');
     }
 
     /**
@@ -83,6 +136,17 @@ class DisfrazController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $message = '';
+        $disfraz = Disfraz::find($id);
+        if ($disfraz->estado == 1) {
+            Disfraz::where('id', $id)->update(['estado' => 0]);
+            $message = 'Disfraz eliminado';
+        } else {
+            Disfraz::where('id', $id)->update(['estado' => 1]);
+            $message = 'Disfraz Restaurado';
+        }
+
+
+        return redirect()->route('disfrazs.index')->with('success', $message);
     }
 }

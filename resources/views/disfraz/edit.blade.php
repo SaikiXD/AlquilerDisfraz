@@ -1,6 +1,6 @@
 @extends('template')
 
-@section('title', 'crear disfraz')
+@section('title', 'Editar disfraz')
 
 @push('css')
     <style>
@@ -15,20 +15,22 @@
 
 @section('content')
     <div class="container-fluid px-4">
-        <h1 class="mt-4 text-center">Crear Disfraces</h1>
+        <h1 class="mt-4 text-center">Editar Disfraces</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('disfrazs.index') }}">Disfraces</a></li>
-            <li class="breadcrumb-item active">crear disfraz</li>
+            <li class="breadcrumb-item active">Editar disfraz</li>
         </ol>
         <div class="container w-100 border border-3 border-primary rounded p-4 mt-3">
-            <form action="{{ route('disfrazs.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('disfrazs.update', ['disfraz' => $disfraz]) }}" method="post"
+                enctype="multipart/form-data">
+                @method('PATCH')
                 @csrf
                 <div class="row g-3">
                     <div class="col-md-6 mb-2">
                         <label for="nombre" class="form-label">Nombre:</label>
                         <input type="text" name="nombre" id="nombre" class="form-control"
-                            value="{{ old('nombre') }}">
+                            value="{{ old('nombre', $disfraz->nombre) }}">
                         @error('nombre')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -36,7 +38,7 @@
                     <div class="col-md-3 mb-2">
                         <label for="nroPiezas" class="form-label">N° de Piezas:</label>
                         <input type="text" name="nroPiezas" id="nroPiezas" class="form-control"
-                            value="{{ old('nroPiezas') }}">
+                            value="{{ old('nroPiezas', $disfraz->nroPiezas) }}">
                         @error('nroPiezas')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -44,14 +46,14 @@
                     <div class="col-md-3">
                         <label for="cantidad" class="form-label">Cantidad:</label>
                         <input type="number" name="cantidad" id="cantidad" class="form-control"
-                            value="{{ old('cantidad') }}">
+                            value="{{ old('cantidad', $disfraz->cantidad) }}">
                         @error('cantidad')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label for="descripcion" class="form-label">Descripcion:</label>
-                        <textarea name="descripcion" id="descripcion" rows="3" class="form-control">{{ old('descripcion') }}</textarea>
+                        <textarea name="descripcion" id="descripcion" rows="3" class="form-control">{{ old('descripcion', $disfraz->descripcion) }}</textarea>
                         @error('descripcion')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -66,7 +68,7 @@
                     <div class="col-md-2">
                         <label for="color" class="form-label">Color:</label>
                         <input type="text" name="color" id="color" class="form-control"
-                            value="{{ old('color') }}">
+                            value="{{ old('color', $disfraz->color) }}">
                         @error('color')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -74,7 +76,7 @@
                     <div class="col-md-2">
                         <label for="edad_min" class="form-label">Edad Mínima:</label>
                         <input type="number" name="edad_min" id="edad_min" class="form-control"
-                            value="{{ old('edad_min') }}">
+                            value="{{ old('edad_min', $disfraz->edad_min) }}">
                         @error('edad_min')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -82,7 +84,7 @@
                     <div class="col-md-2">
                         <label for="edad_max" class="form-label">Edad Máxima:</label>
                         <input type="number" name="edad_max" id="edad_max" class="form-control"
-                            value="{{ old('edad_max') }}">
+                            value="{{ old('edad_max', $disfraz->edad_max) }}">
                         @error('edad_max')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -90,7 +92,7 @@
                     <div class="col-md-2">
                         <label for="precio" class="form-label">Precio:</label>
                         <input type="number" name="precio" id="precio" class="form-control"
-                            value="{{ old('precio') }}">
+                            value="{{ old('precio', $disfraz->precio) }}">
                         @error('precio')
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
@@ -99,10 +101,13 @@
                         <label for="genero" class="form-label">Genero:</label>
                         <select title="Seleccione el género" name="genero" id="genero"
                             class="form-control selectpicker">
-                            <option value="masculino" {{ old('genero') == 'masculino' ? 'selected' : '' }}>Masculino
-                            </option>
-                            <option value="femenino" {{ old('genero') == 'femenino' ? 'selected' : '' }}>Femenino</option>
-                            <option value="unisex" {{ old('genero') == 'unisex' ? 'selected' : '' }}>Unisex</option>
+                            <option value="masculino"
+                                {{ old('genero', $disfraz->genero) == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                            <option value="femenino"
+                                {{ old('genero', $disfraz->genero) == 'femenino' ? 'selected' : '' }}>
+                                Femenino</option>
+                            <option value="unisex" {{ old('genero', $disfraz->genero) == 'unisex' ? 'selected' : '' }}>
+                                Unisex</option>
                         </select>
                         @error('genero')
                             <small class="text-danger">{{ '*' . $message }}</small>
@@ -113,10 +118,13 @@
                         <select data-size="4" title="seleccione las categorias" data-live-search="true"
                             name="categorias[]" id="categorias" class="form-control selectpicker show-tick" multiple>
                             @foreach ($categorias as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ in_array($item->id, old('categorias', [])) ? 'selected' : '' }}>
-                                    {{ $item->nombre }}
-                                </option>
+                                @if (in_array($item->id, $disfraz->categorias->pluck('id')->toArray()))
+                                    <option selected value="{{ $item->id }}"
+                                        {{ in_array($item->id, old('categorias', [])) ? 'selected' : '' }}>
+                                        {{ $item->nombre }}
+                                    </option>
+                                @else
+                                @endif
                             @endforeach
                         </select>
                         @error('categorias')
@@ -131,6 +139,7 @@
             </form>
         </div>
     </div>
+
 @endsection
 
 @push('js')

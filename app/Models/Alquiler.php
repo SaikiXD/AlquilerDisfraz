@@ -9,6 +9,8 @@ class Alquiler extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
@@ -19,10 +21,15 @@ class Alquiler extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function garantia()
+    {
+        return $this->belongsTo(Garantia::class);
+    }
+
     public function disfrazs()
     {
         return $this->belongsToMany(Disfraz::class)
             ->withTimestamps()
-            ->withPivot('cantidad', 'precio_venta');
+            ->withPivot('cantidad');
     }
 }
