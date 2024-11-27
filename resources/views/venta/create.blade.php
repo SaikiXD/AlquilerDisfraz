@@ -1,6 +1,6 @@
 @extends('template')
 
-@section('title', 'Realizar alquiler')
+@section('title', 'Registrar disfraz')
 
 @push('css')
     <link rel="stylesheet"
@@ -10,14 +10,14 @@
 @endpush
 @section('content')
     <div class="container-fluid px-4">
-        <h1 class="mt-4 text-center">Realizar Alquiler</h1>
+        <h1 class="mt-4 text-center">Registrar disfraz</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Alquileres</a></li>
-            <li class="breadcrumb-item active">Realizar Alquiler</li>
+            <li class="breadcrumb-item"><a href="{{ route('disfrazs.index') }}">Alquileres</a></li>
+            <li class="breadcrumb-item active">Registrar disfraz</li>
         </ol>
     </div>
-    <form action="{{ route('ventas.store') }}" method="post">
+    <form action="{{ route('disfrazs.store') }}" method="post">
         @csrf
 
         <div class="container-lg mt-4">
@@ -25,23 +25,34 @@
                 <!------alquiler disfraz---->
                 <div class="col-xl-8">
                     <div class="text-white bg-primary p-1 text-center">
-                        Detalles del alquiler
+                        Detalles de la pieza
                     </div>
                     <div class="p-3 border border-3 border-primary">
                         <div class="row">
                             <!-----disfraz---->
                             <div class="col-12 mb-4">
-                                <select name="disfraz_id" id="disfraz_id" class="form-control selectpicker"
-                                    data-live-search="true" data-size="1" title="Busque un disfraz aquí">
-                                    @foreach ($disfrazs as $item)
-                                        <option value="{{ $item->id }}-{{ $item->cantidad }}-{{ $item->precio }}">
-                                            {{ $item->nombre }}
-                                        </option>
+                                <label for="conjunto_id">Seleccione un conjunto</label>
+                                <select name="conjunto_id" id="conjunto_id" class="form-control">
+                                    @foreach ($conjuntos as $conjunto)
+                                        <option value="{{ $conjunto->id }}">{{ $conjunto->nombre }}</option>
                                     @endforeach
                                 </select>
+                                <button type="submit" class="btn btn-primary">Buscar Piezas</button>
                             </div>
-                            <!-----Stock--->
-                            <div class="d-flex justify-content-end mb-4">
+                            @if (isset($piezas) && $piezas->count())
+                                <h3>Piezas del Conjunto</h3>
+                                <ul>
+                                    @foreach ($piezas as $pieza)
+                                        <li>{{ $pieza->nombre }} - {{ $pieza->descripcion }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p>No se encontraron piezas para este conjunto.</p>
+                            @endif
+
+    </form>
+    <!-----Stock--->
+    {{-- <div class="d-flex justify-content-end mb-4">
                                 <div class="col-12 col-sm-6">
                                     <div class="row">
                                         <label for="stock" class="col-form-label col-sm-4">Stock:</label>
@@ -120,18 +131,18 @@
                                 </div>
                             </div>
 
-                            <!--Boton para cancelar venta-->
+                            <!--Boton para cancelar alquiler-->
                             <div class="col-12 mt-2">
                                 <button id="cancelar" type="button" class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
-                                    Cancelar venta
+                                    Cancelar Alquiler
                                 </button>
-                            </div>
+                            </div> --}}
 
-                        </div>
-                    </div>
-                </div>
-
+    </div>
+    </div>
+    </div>
+    {{--
                 <!-----venta---->
                 <div class="col-xl-4">
                     <div class="text-white bg-success p-1 text-center">
@@ -225,18 +236,17 @@
                             <input type="hidden" name="user_id" value="1">
                             <!--Botones--->
                             <div class="col-12 mt-4 text-center">
-                                <button type="submit" class="btn btn-success" id="guardar">Realizar Venta</button>
+                                <button type="submit" class="btn btn-success" id="guardar">Realizar alquiler</button>
                             </div>
 
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div> --}}
+    </div>
+    </div>
 
-        <!-- Modal para cancelar la venta -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+    <!-- Modal para cancelar la venta -->
+    {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -253,13 +263,44 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </form>
 @endsection
 
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectConjuntos = document.getElementById('conjuntos');
+            const piezasContainer = document.getElementById('piezasContainer');
+
+            selectConjuntos.addEventListener('change', function() {
+                const conjuntoId = this.value;
+
+                if (conjuntoId) {
+                    fetch(`/conjuntos/${conjuntoId}/piezas`)
+                        .then(response => response.json())
+                        .then(data => {
+                            piezasContainer.innerHTML = '';
+
+                            if (data.length > 0) {
+                                data.forEach(pieza => {
+                                    const piezaElement = document.createElement('div');
+                                    piezaElement.textContent = pieza
+                                        .nombre; // Ajusta al nombre real del atributo
+                                    piezasContainer.appendChild(piezaElement);
+                                });
+                            } else {
+                                piezasContainer.innerHTML = '<p>No hay piezas para este conjunto.</p>';
+                            }
+                        })
+                        .catch(error => console.error('Error fetching piezas:', error));
+                }
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
 

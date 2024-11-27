@@ -12,28 +12,36 @@ class Disfraz extends Model
 
     protected $fillable = [
         'nombre',
-        'nroPiezas',
-        'cantidad',
         'descripcion',
+        'nroPiezas',
         'img_path',
-        'color',
-        'edad_min',
-        'edad_max',
-        'precio',
-        'genero'
+        'genero',
+        'precio'
     ];
 
-    public function alquilers()
+    public function piezas()
     {
-        return $this->belongsToMany(Alquiler::class)
+        return $this->belongsToMany(Pieza::class)
             ->withTimestamps()
-            ->withPivot('cantidad', 'precio_venta');
+            ->withPivot('cantidad', 'color', 'talla', 'material');
     }
 
     public function categorias()
     {
         return $this->belongsToMany(Categoria::class)
             ->withTimestamps();
+    }
+    public function clientes()
+    {
+        return $this->belongsToMany(Cliente::class)->withTimestamps()
+            ->withPivot(
+                'img_path',
+                'descripcion_garantia',
+                'valor_garantia',
+                'cantidad',
+                'fecha_alquiler',
+                'fecha_devolucion'
+            );
     }
     public function hanbleUploadImage($image)
     {

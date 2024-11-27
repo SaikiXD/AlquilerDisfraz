@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('persona_id')->unique()->constrained('personas')->onDelete('cascade');
+            $table->string('nombre');
+            $table->integer('ci')->unique();
+            $table->string('gmail')->unique()->nullable();
+            $table->string('direccion');
+            $table->integer('celular')->unique();
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

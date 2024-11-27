@@ -16,16 +16,15 @@ return new class extends Migration
     {
         Schema::create('alquilers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onDelete('set null');
-            $table->foreignId('garantia_id')->nullable()->constrained('garantias')->onDelete('set null');
+            $table->foreignId('disfraz_id')->nullable()->constrained('disfrazs')->onDelete('set null');
             $table->string('img_path')->nullable();
             $table->string('descripcion_garantia')->nullable()->default('N/A');
             $table->decimal('valor_garantia')->nullable()->default(0);
+            $table->integer('cantidad');
+            $table->decimal('precio_alquiler');
             $table->dateTime('fecha_alquiler');
             $table->date('fecha_devolucion');
-            $table->decimal('total', 10, 2);
-            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

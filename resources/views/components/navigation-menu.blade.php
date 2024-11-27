@@ -52,15 +52,22 @@
                                 </nav>
                             </div--->
                     <div class="sb-sidenav-menu-heading">Modulos</div>
-                    <!----Ventas---->
+                    <!----categoria---->
                     <a class="nav-link" href="{{ route('categorias.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
                         Categorias
                     </a>
+                    <!----pieza---->
+                    <a class="nav-link" href="{{ route('piezas.index') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
+                        Piezas
+                    </a>
+                    <!----disfraz---->
                     <a class="nav-link" href="{{ route('disfrazs.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-shirt"></i></div>
                         Disfraces
                     </a>
+                    <!----cliente---->
                     <a class="nav-link" href="{{ route('clientes.index') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                         Clientes
@@ -71,13 +78,6 @@
                         Alquiler
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
-                    <div class="collapse" id="collapseVentas" aria-labelledby="headingOne"
-                        data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{ route('ventas.index') }}">Ver</a>
-                            <a class="nav-link" href="{{ route('ventas.create') }}">Crear</a>
-                        </nav>
-                    </div>
                 </div>
             </div>
             <div class="sb-sidenav-footer">

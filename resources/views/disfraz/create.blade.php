@@ -72,22 +72,6 @@
                         @enderror
                     </div>
                     <div class="col-md-2">
-                        <label for="edad_min" class="form-label">Edad Mínima:</label>
-                        <input type="number" name="edad_min" id="edad_min" class="form-control"
-                            value="{{ old('edad_min') }}">
-                        @error('edad_min')
-                            <small class="text-danger">{{ '*' . $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-2">
-                        <label for="edad_max" class="form-label">Edad Máxima:</label>
-                        <input type="number" name="edad_max" id="edad_max" class="form-control"
-                            value="{{ old('edad_max') }}">
-                        @error('edad_max')
-                            <small class="text-danger">{{ '*' . $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="col-md-2">
                         <label for="precio" class="form-label">Precio:</label>
                         <input type="number" name="precio" id="precio" class="form-control"
                             value="{{ old('precio') }}">
@@ -110,8 +94,8 @@
                     </div>
                     <div class="col-md-6 -md-2">
                         <label for="categorias" class="form-label">Categorias:</label>
-                        <select data-size="4" title="seleccione las categorias" data-live-search="true"
-                            name="categorias[]" id="categorias" class="form-control selectpicker show-tick" multiple>
+                        <select data-size="4" title="seleccione las categorias" data-live-search="true" name="categorias[]"
+                            id="categorias" class="form-control selectpicker show-tick" multiple>
                             @foreach ($categorias as $item)
                                 <option value="{{ $item->id }}"
                                     {{ in_array($item->id, old('categorias', [])) ? 'selected' : '' }}>

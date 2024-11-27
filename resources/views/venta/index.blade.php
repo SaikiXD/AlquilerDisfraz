@@ -90,7 +90,6 @@
                                                 Ver
                                             </button>
                                         </form>
-
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                             data-bs-target="#confirmModal-{{ $item->id }}">Eliminar</button>
                                     </div>

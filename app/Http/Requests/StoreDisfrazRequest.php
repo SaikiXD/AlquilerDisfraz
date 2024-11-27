@@ -27,9 +27,6 @@ class StoreDisfrazRequest extends FormRequest
             'cantidad' => 'required|integer',
             'descripcion' => 'nullable|string',
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'color' => 'required|string|max:255',
-            'edad_min' => 'required|integer|min:3',
-            'edad_max' => 'required|integer|min:3',
             'precio' => 'required|numeric|min:0|max:100000',
             'genero' => 'required|string|max:255',
             'categorias' => 'required'
@@ -39,17 +36,6 @@ class StoreDisfrazRequest extends FormRequest
     {
         return [
             'nroPiezas' => 'piezas',
-            'edad_min' => 'edad minima',
-            'edad_max' => 'edad maxima'
         ];
-    }
-    public function withValidator($validacion)
-    {
-        $validacion->after(function ($validacion) {
-            if ($this->edad_min >= $this->edad_max) {
-                $validacion->errors()->add('edad_min', 'La edad mínima debe ser menor que la edad máxima.');
-                $validacion->errors()->add('edad_max', 'La edad máxima debe ser mayor que la edad mínima.');
-            }
-        });
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePersonaRequest extends FormRequest
+class StoreConjuntoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class StorePersonaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => 'required|max:255',
-            'gmail' => 'required|max:255',
-            'direccion' => 'required|max:255',
-            'celular' => 'required|max:10',
+            'nombre' => 'required|max:255|unique:conjuntos,nombre',
+            'descripcion' => 'nullable'
         ];
     }
 }

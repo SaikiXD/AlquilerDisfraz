@@ -9,14 +9,16 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    public function persona()
+    public function disfrazs()
     {
-        return $this->belongsTo(Persona::class);
+        return $this->belongsToMany(Disfraz::class)->withTimestamps()
+            ->withPivot(
+                'img_path',
+                'descripcion_garantia',
+                'valor_garantia',
+                'cantidad',
+                'fecha_alquiler',
+                'fecha_devolucion'
+            );
     }
-
-    public function alquilers()
-    {
-        return $this->hasMany(Alquiler::class);
-    }
-    protected $fillable = ['persona_id'];
 }

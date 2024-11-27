@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ConjuntoController;
+use App\Http\Controllers\PiezaController;
 use App\Http\Controllers\clienteController;
 use App\Http\Controllers\DisfrazController;
 use App\Http\Controllers\VentaController;
 use App\Models\Disfraz;
+use App\Models\Pieza;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,9 +29,9 @@ Route::view('/panel', 'panel.index')->name('panel');
 
 Route::resources([
     'categorias' => CategoriaController::class,
+    'piezas' => PiezaController::class,
     'disfrazs' => DisfrazController::class,
     'clientes' => ClienteController::class,
-    'ventas' => VentaController::class
 ]);
 
 Route::get('/login', function () {

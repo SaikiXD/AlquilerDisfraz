@@ -16,15 +16,9 @@ return new class extends Migration
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->integer('nroPiezas');
-            $table->string('img_path')->nullable();
-            $table->string('color');
+            $table->string('img_path');
             $table->string('genero');
-            //$table->string('talla');
-            $table->integer('edad_min');
-            $table->integer('edad_max');
             $table->decimal('precio', 10, 2);
-            $table->integer('cantidad');
-            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

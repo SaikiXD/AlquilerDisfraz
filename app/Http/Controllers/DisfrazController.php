@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDisfrazRequest;
 use App\Http\Requests\UpdateDisfrazRequest;
 use App\Models\Categoria;
 use App\Models\Disfraz;
+use App\Models\Pieza;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -37,7 +38,7 @@ class DisfrazController extends Controller
 
     public function store(StoreDisfrazRequest $request)
     {
-        try {
+        /*try {
             DB::beginTransaction();
             //disfraz
             $disfraz = new Disfraz();
@@ -61,16 +62,18 @@ class DisfrazController extends Controller
             $disfraz->save();
 
             //disfraz-categorias
+            $conjuntos = $request->get('conjuntos');
             $categorias = $request->get('categorias');
+            $disfraz->conjuntos()->attach($conjuntos);
             $disfraz->categorias()->attach($categorias);
-
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             Log::error('Error al crear disfraz: ' . $e->getMessage());
             return redirect()->route('disfrazs.index')->with('error', 'Error al registrar disfraz');
         }
-        return redirect()->route('disfrazs.index')->with('success', 'Disfraz registrado');
+        return redirect()->route('disfrazs.index')->with('success', 'Disfraz registrado');*/
+        dd($request);
     }
 
 
@@ -148,5 +151,12 @@ class DisfrazController extends Controller
 
 
         return redirect()->route('disfrazs.index')->with('success', $message);
+    }
+    public function mostrarPiezas(Request $request)
+    {
+        $conjuntoId = $request->input('conjunto_id');
+        $piezas = Pieza::where('conjunto_id', $conjuntoId)->get();
+
+        return view('tu_vista', compact('piezas'));
     }
 }

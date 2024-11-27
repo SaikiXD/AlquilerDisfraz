@@ -36,10 +36,15 @@ class ClienteController extends Controller
     {
         try {
             DB::beginTransaction();
-            $persona = Persona::create($request->validated());
-            $persona->cliente()->create([
-                'persona_id' => $persona->id
+            $cliente = new Cliente();
+            $cliente->fill([
+                'nombre' => $request->nombre,
+                'ci' => $request->ci,
+                'gmail' => $request->gmail,
+                'direccion' => $request->direccion,
+                'celular' => $request->celular
             ]);
+            $cliente->save();
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -60,8 +65,7 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        $cliente->load('persona');
-        return view('cliente.edit', compact('cliente'));
+        return view('cliente.edit', ['cliente' => $cliente]);
     }
 
     /**
@@ -69,15 +73,8 @@ class ClienteController extends Controller
      */
     public function update(UpdateClienteRequest $request, Cliente $cliente)
     {
-        try {
-            DB::beginTransaction();
 
-            Persona::where('id', $cliente->persona->id)->update($request->validated());
-
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-        }
+        Cliente::where('id', $cliente->id)->update($request->validated());
         return redirect()->route('clientes.index')->with('success', 'Cliente editado');
     }
 
@@ -87,12 +84,12 @@ class ClienteController extends Controller
     public function destroy(string $id)
     {
         $message = '';
-        $persona = Persona::find($id);
-        if ($persona->estado == 1) {
-            Persona::where('id', $persona->id)->update(['estado' => 0]);
+        $cliente = Cliente::find($id);
+        if ($cliente->estado == 1) {
+            Cliente::where('id', $id)->update(['estado' => 0]);
             $message = 'Cliente eliminado';
         } else {
-            Persona::where('id', $persona->id)->update(['estado' => 1]);
+            Cliente::where('id', $id)->update(['estado' => 1]);
             $message = 'Cliente Restaurado';
         }
 
