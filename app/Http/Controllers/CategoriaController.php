@@ -7,7 +7,6 @@ use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategotiaRequest;
 use App\Models\Categoria;
 use Exception;
-use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
@@ -36,25 +35,20 @@ class CategoriaController extends Controller
     {
         try {
             DB::beginTransaction();
+
             $categoria = new Categoria();
             $categoria->fill([
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion
             ]);
             $categoria->save();
+
             DB::commit();
+            return redirect()->route('categorias.index')->with('success', 'Categoria registrada');
         } catch (Exception $e) {
             DB::rollback();
+            return redirect()->route('categorias.index')->with('error', 'Error al registrar la categoria');
         }
-        return redirect()->route('categorias.index')->with('success', 'Categoria registrada');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -62,7 +56,6 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
-
         return view('categoria.edit', ['categoria' => $categoria]);
     }
 
@@ -71,8 +64,12 @@ class CategoriaController extends Controller
      */
     public function update(UpdateCategotiaRequest $request, Categoria $categoria)
     {
-        Categoria::where('id', $categoria->id)->update($request->validated());
-        return redirect()->route('categorias.index')->with('success', 'Categoria editada');
+        try {
+            $categoria->update($request->validated());
+            return redirect()->route('categorias.index')->with('success', 'Categoria editada');
+        } catch (Exception $e) {
+            return redirect()->route('categorias.index')->with('error', 'Error al editar la categoria');
+        }
     }
 
     /**
@@ -80,16 +77,14 @@ class CategoriaController extends Controller
      */
     public function destroy(string $id)
     {
-        $message = '';
         $categoria = Categoria::find($id);
-        if ($categoria->estado == 1) {
-            Categoria::where('id', $id)->update(['estado' => 0]);
-            $message = 'Categoria eliminada';
-        } else {
-            Categoria::where('id', $id)->update(['estado' => 1]);
-            $message = 'Categoria Restaurada';
+
+        if (!$categoria) {
+            return redirect()->route('categorias.index')->with('error', 'Categoria no encontrada');
         }
 
+        $categoria->update(['estado' => !$categoria->estado]); // Cambia entre 1 y 0
+        $message = $categoria->estado ? 'Categoria restaurada' : 'Categoria eliminada';
 
         return redirect()->route('categorias.index')->with('success', $message);
     }

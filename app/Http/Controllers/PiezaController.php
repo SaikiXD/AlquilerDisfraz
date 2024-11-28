@@ -7,10 +7,10 @@ use App\Http\Requests\StorePiezaRequest;
 use App\Http\Requests\UpdatePiezaRequest;
 use App\Models\Pieza;
 use Exception;
-use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class piezaController extends Controller
+class PiezaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,8 +26,6 @@ class piezaController extends Controller
      */
     public function create()
     {
-        // Obtener todas las conjuntos activas
-        // Devolver la vista 'pieza.create' con las conjuntos
         return view('pieza.create');
     }
 
@@ -45,18 +43,12 @@ class piezaController extends Controller
             ]);
             $pieza->save();
             DB::commit();
+            return redirect()->route('piezas.index')->with('success', 'Pieza registrada');
         } catch (Exception $e) {
             DB::rollback();
+            Log::error('Error al registrar pieza: ' . $e->getMessage());
+            return redirect()->route('piezas.index')->with('error', 'Error al registrar la pieza');
         }
-        return redirect()->route('piezas.index')->with('success', 'Pieza registrada');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -64,8 +56,7 @@ class piezaController extends Controller
      */
     public function edit(Pieza $pieza)
     {
-        // Obtener todas las categorías activas
-        return view('pieza.edit',  ['pieza' => $pieza]);
+        return view('pieza.edit', ['pieza' => $pieza]);
     }
 
     /**
@@ -78,22 +69,36 @@ class piezaController extends Controller
             $pieza->fill([
                 'nombre' => $request->nombre,
                 'tipo' => $request->tipo
-
             ]);
             $pieza->save();
-
             DB::commit();
+            return redirect()->route('piezas.index')->with('success', 'Pieza editada');
         } catch (Exception $e) {
-            DB::rollBack();
+            DB::rollback();
+            Log::error('Error al editar pieza: ' . $e->getMessage());
+            return redirect()->route('piezas.index')->with('error', 'Error al editar la pieza');
         }
-
-        return redirect()->route('piezas.index')->with('success', 'Pieza editado');
     }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $pieza = Pieza::find($id);
+
+            if (!$pieza) {
+                return redirect()->route('piezas.index')->with('error', 'Pieza no encontrada');
+            }
+
+            $pieza->update(['estado' => !$pieza->estado]); // Cambia entre 1 y 0
+            $message = $pieza->estado ? 'Pieza restaurada con éxito' : 'Pieza eliminada con éxito';
+
+            return redirect()->route('piezas.index')->with('success', $message);
+        } catch (Exception $e) {
+            Log::error('Error al cambiar estado de la pieza: ' . $e->getMessage());
+            return redirect()->route('piezas.index')->with('error', 'Error al eliminar/restaurar la pieza');
+        }
     }
 }
