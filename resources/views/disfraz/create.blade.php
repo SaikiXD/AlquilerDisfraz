@@ -1,3 +1,4 @@
+
 <form id="form-disfraz" method="POST" action="{{ route('disfrazs.store') }}">
     @csrf
     <!-- Título -->
@@ -34,59 +35,27 @@
         </div>
     </div>
 
-    <!-- Paso 2: Selección de Piezas -->
-    <div id="step-2" class="form-step d-none">
-        <h5 class="mb-4 text-center">Paso 2: Selección de Piezas</h5>
-        <div id="piezas-container" class="mb-4">
-            <div class="card p-3 mb-3 shadow-sm">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <label class="form-label">Tipo de Pieza</label>
-                        <select class="form-select tipo-select" required>
-                            <option value="" disabled selected>Seleccione un tipo</option>
-                            @foreach ($piezas_tipo as $tipo => $piezas)
-                                <option value="{{ $tipo }}">{{ ucfirst($tipo) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Pieza</label>
-                        <select class="form-select pieza-select" name="piezas[]" required disabled>
-                            <option value="" disabled selected>Seleccione una pieza</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Cantidad</label>
-                        <input type="number" class="form-control" name="cantidad[]" min="1" required>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Color</label>
-                        <input type="text" class="form-control" name="color[]">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Talla</label>
-                        <input type="text" class="form-control" name="talla[]">
-                    </div>
-                    <div class="col-md-1 d-flex align-items-center justify-content-center mt-4">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-pieza-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" onclick="prevStep(1)">
-                <i class="fas fa-arrow-left"></i> Anterior
-            </button>
-            <button type="button" class="btn btn-primary" id="add-pieza-btn">
-                <i class="fas fa-plus"></i> Añadir otra pieza
-            </button>
-            <button type="button" class="btn btn-primary" onclick="nextStep(3)">
-                Siguiente <i class="fas fa-arrow-right"></i>
-            </button>
-        </div>
+<!-- Paso 2: Selección de Piezas -->
+<div id="step-2" class="form-step d-none">
+    <h5 class="mb-3">Paso 2: Selección de Piezas</h5>
+    <!-- Contenedor para filas dinámicas -->
+    <div id="piezas-container">
+        <!-- Este contenedor estará vacío inicialmente, las filas se agregarán dinámicamente -->
+</div>
+
+    <!-- Botón para añadir una nueva pieza -->
+    <div class="mb-3 text-end">
+        <button type="button" id="add-pieza-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Añadir otra pieza
+        </button>
     </div>
+
+    <!-- Botones de navegación -->
+    <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary px-4" onclick="prevStep(1)">Anterior</button>
+        <button type="button" class="btn btn-primary px-4" onclick="nextStep(3)">Siguiente</button>
+    </div>
+</div>
     <!--paso 3-->
     <div id="step-3" class="form-step d-none">
         <!-- Título del Paso 3 -->
@@ -95,17 +64,23 @@
         <!-- Categorías -->
         <div class="mb-3">
             <label for="categorias" class="form-label">Categorías</label>
-            <select class="form-control selectpicker" data-size="5" data-live-search="true"
-                title="Seleccione las categorías" name="categorias[]" id="categorias" multiple>
+            <select 
+                class="form-control selectpicker @error('categorias') is-invalid @enderror" 
+                data-live-search="true" 
+                name="categorias[]" 
+                id="categorias" 
+                multiple>
+                <option value="" disabled>Seleccione las categorías</option>
                 @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}"
-                        {{ in_array($categoria->id, old('categorias', [])) ? 'selected' : '' }}>
+                    <option 
+                        value="{{ $categoria->id }}" 
+                        {{ collect(old('categorias'))->contains($categoria->id) ? 'selected' : '' }}>
                         {{ $categoria->nombre }}
                     </option>
                 @endforeach
             </select>
             @error('categorias')
-                <small class="text-danger">{{ '*' . $message }}</small>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 

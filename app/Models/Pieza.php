@@ -11,7 +11,7 @@ class Pieza extends Model
 
     public function disfrazs()
     {
-        return $this->belongsToMany(Disfraz::class)
+            return $this->belongsToMany(Disfraz::class)
             ->withTimestamps()
             ->withPivot('cantidad', 'color', 'talla', 'material');
     }

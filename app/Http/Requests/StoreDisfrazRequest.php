@@ -29,13 +29,17 @@ class StoreDisfrazRequest extends FormRequest
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'precio' => 'required|numeric|min:0|max:100000',
             'genero' => 'required|string|max:255',
-            'categorias' => 'required'
+            'categorias' => 'required|array|min:1',
+            'categorias.*' => 'exists:categorias,id',
         ];
     }
-    public function attributes()
+    public function messages(): array
     {
         return [
-            'nroPiezas' => 'piezas',
+            'categorias.required' => 'Debe seleccionar al menos una categoría.',
+            'categorias.array' => 'El campo categorías debe ser una lista válida.',
+            'categorias.min' => 'Debe seleccionar al menos una categoría.',
+            'categorias.*.exists' => 'Una de las categorías seleccionadas no es válida.',
         ];
     }
 }
