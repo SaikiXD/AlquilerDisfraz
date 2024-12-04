@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('piezas', function (Blueprint $table) {
+        Schema::create('tipos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tipo_id')->constrained('tipos')->onDelete('cascade');
             $table->string('nombre');
+            $table->text('descripcion')->nullable();
             $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('piezas');
+        Schema::dropIfExists('tipos');
     }
 };

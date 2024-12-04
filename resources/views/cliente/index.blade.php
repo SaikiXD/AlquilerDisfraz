@@ -52,6 +52,7 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>CI</th>
                             <th>Correo</th>
                             <th>Direccion</th>
                             <th>Celular</th>
@@ -63,19 +64,22 @@
                         @foreach ($clientes as $item)
                             <tr>
                                 <td>
-                                    {{ $item->persona->nombre }}
+                                    {{ $item->nombre }}
                                 </td>
                                 <td>
-                                    {{ $item->persona->gmail }}
+                                    {{ $item->ci }}
                                 </td>
                                 <td>
-                                    {{ $item->persona->direccion }}
+                                    {{ $item->gmail }}
                                 </td>
                                 <td>
-                                    {{ $item->persona->celular }}
+                                    {{ $item->direccion }}
                                 </td>
                                 <td>
-                                    @if ($item->persona->estado == 1)
+                                    {{ $item->celular }}
+                                </td>
+                                <td>
+                                    @if ($item->estado == 1)
                                         <span class="fw-bolder p-1 rounded bg-success text-white">Activo</span>
                                     @else
                                         <span class="fw-bolder p-1 rounded bg-danger text-white">Eliminado</span>
@@ -87,7 +91,7 @@
                                         <form action="{{ route('clientes.edit', ['cliente' => $item]) }}" method="get">
                                             <button type="submit" class="btn btn-warning">Editar</button>
                                         </form>
-                                        @if ($item->persona->estado == 1)
+                                        @if ($item->estado == 1)
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                                 data-bs-target="#confirmModal-{{ $item->id }}">Eliminar</button>
                                         @else
@@ -109,13 +113,12 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            {{ $item->persona->estado == 1 ? '¿Seguro quieres eliminar al cliente?' : '¿Seguro quieres restaurar al cliente?' }}
+                                            {{ $item->estado == 1 ? '¿Seguro quieres eliminar al cliente?' : '¿Seguro quieres restaurar al cliente?' }}
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cerrar</button>
-                                            <form
-                                                action="{{ route('clientes.destroy', ['cliente' => $item->persona->id]) }}"
+                                            <form action="{{ route('clientes.destroy', ['cliente' => $item->id]) }}"
                                                 method="post">
                                                 @method('DELETE')
                                                 @csrf

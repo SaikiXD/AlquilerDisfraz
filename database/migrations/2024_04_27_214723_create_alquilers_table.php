@@ -17,18 +17,19 @@ return new class extends Migration
         Schema::create('alquilers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onDelete('set null');
-            $table->foreignId('disfraz_id')->nullable()->constrained('disfrazs')->onDelete('set null');
-            $table->string('img_path')->nullable();
+            $table->foreignId('users_id')->nullable()->constrained('users')->onDelete('set null');
+
+            $table->string('img_path_garangia')->nullable();
+            $table->string('tipo_garantia');
             $table->string('descripcion_garantia')->nullable()->default('N/A');
             $table->decimal('valor_garantia')->nullable()->default(0);
-            $table->integer('cantidad');
-            $table->decimal('precio_alquiler');
+            $table->decimal('precio_alquiler', 10, 2);
             $table->dateTime('fecha_alquiler');
             $table->date('fecha_devolucion');
+            $table->enum('estado', ['pendiente', 'en_progreso', 'finalizado', 'cancelado'])->default('pendiente');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

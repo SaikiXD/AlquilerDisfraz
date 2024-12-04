@@ -30,6 +30,14 @@
                             <small class="text-danger">{{ '*' . $message }}</small>
                         @enderror
                     </div>
+                    <div class="col-md-5">
+                        <label for="ci" class="form-label">Ci:</label>
+                        <input type="number" name="ci" id="ci" class="form-control"
+                            value="{{ old('ci') }}">
+                        @error('ci')
+                            <small class="text-danger">{{ '*' . $message }}</small>
+                        @enderror
+                    </div>
                     <div class="col-md-7 mb-2">
                         <label for="gmail" class="form-label">Correo:</label>
                         <input type="text" name="gmail" id="gmail" class="form-control"

@@ -21,10 +21,15 @@ class UpdatePiezaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $piezaid = $this->route('pieza')->id;
         return [
-            'nombre' => 'required|max:255|unique:piezas,nombre,' . $piezaid,
-            'tipo' => 'required|string'
+            'nombre' => 'required|max:255',
+            'tipo_id' => 'required|integer|exists:tipos,id'
+        ];
+    }
+    public function attributes()
+    {
+        return [
+            'tipo_id' => 'tipo'
         ];
     }
 

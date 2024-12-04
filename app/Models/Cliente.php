@@ -9,16 +9,9 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    public function disfrazs()
+    public function alquiler()
     {
-        return $this->belongsToMany(Disfraz::class)->withTimestamps()
-            ->withPivot(
-                'img_path',
-                'descripcion_garantia',
-                'valor_garantia',
-                'cantidad',
-                'fecha_alquiler',
-                'fecha_devolucion'
-            );
+        return $this->hasMany(Alquiler::class);
     }
+    protected $fillable = ['nombre', 'ci', 'gmail', 'direccion', 'celular'];
 }

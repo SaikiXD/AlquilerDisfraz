@@ -1,11 +1,10 @@
 <?php
 
 use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\ConjuntoController;
 use App\Http\Controllers\PiezaController;
 use App\Http\Controllers\clienteController;
 use App\Http\Controllers\DisfrazController;
-use App\Http\Controllers\VentaController;
+use App\Http\Controllers\AlquilerController;
 use App\Models\Disfraz;
 use App\Models\Pieza;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +31,10 @@ Route::resources([
     'piezas' => PiezaController::class,
     'disfrazs' => DisfrazController::class,
     'clientes' => ClienteController::class,
+    'alquilers' => AlquilerController::class
 ]);
+
+Route::post('/disfraz/piezas', [DisfrazController::class, 'getPiezas'])->name('piezas.postPiezas');
 
 Route::get('/login', function () {
     return view('auth.login');

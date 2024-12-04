@@ -11,12 +11,16 @@ class Pieza extends Model
 
     public function disfrazs()
     {
-            return $this->belongsToMany(Disfraz::class)
+        return $this->belongsToMany(Disfraz::class)
             ->withTimestamps()
             ->withPivot('cantidad', 'color', 'talla', 'material');
     }
+    public function tipo()
+    {
+        return $this->belongsTo(Tipo::class, 'tipo_id');
+    }
     protected $fillable = [
         'nombre',
-        'tipo'
+        'tipo_id'
     ];
 }

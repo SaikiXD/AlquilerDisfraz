@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->integer('nroPiezas');
-            $table->string('img_path');
             $table->string('genero');
+            $table->string('img_path');
             $table->decimal('precio', 10, 2);
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
         });
     }

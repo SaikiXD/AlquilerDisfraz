@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StorePersonaRequest;
+use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use Illuminate\Http\Request;
-use App\Models\Persona;
 use App\Models\Cliente;
+use App\Models\Pieza;
 use Exception;
 
 class ClienteController extends Controller
@@ -17,9 +17,10 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::with('persona')->get();
-        return view('cliente.index', compact('clientes'));
+        $clientes = Cliente::latest()->get();
+        return view('cliente.index', ['clientes' => $clientes]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -32,24 +33,24 @@ class ClienteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePersonaRequest $request)
+    public function store(StoreClienteRequest $request)
     {
         try {
             DB::beginTransaction();
-            $cliente = new Cliente();
-            $cliente->fill([
-                'nombre' => $request->nombre,
-                'ci' => $request->ci,
-                'gmail' => $request->gmail,
-                'direccion' => $request->direccion,
-                'celular' => $request->celular
-            ]);
-            $cliente->save();
-            DB::commit();
+
+            // Crear el cliente con los datos del request
+            $cliente = Cliente::create($request->validated());
+
+            DB::commit(); // Confirmar la transacción
+
+            // Respuesta JSON para peticiones AJAX
+            return response()->json($cliente, 201);
         } catch (Exception $e) {
-            DB::rollback();
+            DB::rollBack(); // Revertir la transacción en caso de error
+
+            // Respuesta JSON para errores
+            return response()->json(['message' => 'Error al crear cliente.'], 500);
         }
-        return redirect()->route('clientes.index')->with('success', 'Cliente registrado');
     }
 
     /**

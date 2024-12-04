@@ -6,19 +6,20 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePiezaRequest;
 use App\Http\Requests\UpdatePiezaRequest;
 use App\Models\Pieza;
+use App\Models\Tipo;
 use Exception;
+use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class PiezaController extends Controller
+class piezaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $piezas = Pieza::latest()->get();
-        return view('pieza.index', ['piezas' => $piezas]);
+        $piezas = Pieza::with('tipo')->latest()->get();
+        return view('pieza.index', compact('piezas'));
     }
 
     /**
@@ -26,7 +27,8 @@ class PiezaController extends Controller
      */
     public function create()
     {
-        return view('pieza.create');
+        $tipos = Tipo::where('estado', 1)->get();
+        return view('pieza.create', compact('tipos'));
     }
 
     /**
@@ -39,16 +41,22 @@ class PiezaController extends Controller
             $pieza = new Pieza();
             $pieza->fill([
                 'nombre' => $request->nombre,
-                'tipo' => $request->tipo
+                'tipo_id' => $request->tipo_id
             ]);
             $pieza->save();
             DB::commit();
-            return redirect()->route('piezas.index')->with('success', 'Pieza registrada');
         } catch (Exception $e) {
             DB::rollback();
-            Log::error('Error al registrar pieza: ' . $e->getMessage());
-            return redirect()->route('piezas.index')->with('error', 'Error al registrar la pieza');
         }
+        return redirect()->route('piezas.index')->with('success', 'Pieza registrada');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
     }
 
     /**
@@ -56,7 +64,8 @@ class PiezaController extends Controller
      */
     public function edit(Pieza $pieza)
     {
-        return view('pieza.edit', ['pieza' => $pieza]);
+        $tipos = Tipo::where('estado', 1)->get();
+        return view('pieza.edit',  ['pieza' => $pieza, 'tipos' => $tipos]);
     }
 
     /**
@@ -68,37 +77,23 @@ class PiezaController extends Controller
             DB::beginTransaction();
             $pieza->fill([
                 'nombre' => $request->nombre,
-                'tipo' => $request->tipo
+                'tipo_id' => $request->tipo_id
+
             ]);
             $pieza->save();
-            DB::commit();
-            return redirect()->route('piezas.index')->with('success', 'Pieza editada');
-        } catch (Exception $e) {
-            DB::rollback();
-            Log::error('Error al editar pieza: ' . $e->getMessage());
-            return redirect()->route('piezas.index')->with('error', 'Error al editar la pieza');
-        }
-    }
 
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+
+        return redirect()->route('piezas.index')->with('success', 'Pieza editado');
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        try {
-            $pieza = Pieza::find($id);
-
-            if (!$pieza) {
-                return redirect()->route('piezas.index')->with('error', 'Pieza no encontrada');
-            }
-
-            $pieza->update(['estado' => !$pieza->estado]); // Cambia entre 1 y 0
-            $message = $pieza->estado ? 'Pieza restaurada con éxito' : 'Pieza eliminada con éxito';
-
-            return redirect()->route('piezas.index')->with('success', $message);
-        } catch (Exception $e) {
-            Log::error('Error al cambiar estado de la pieza: ' . $e->getMessage());
-            return redirect()->route('piezas.index')->with('error', 'Error al eliminar/restaurar la pieza');
-        }
+        //
     }
 }

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('piezas', function (Blueprint $table) {
+        Schema::create('alquiler_disfraz', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tipo_id')->constrained('tipos')->onDelete('cascade');
-            $table->string('nombre');
-            $table->tinyInteger('estado')->default(1);
+            $table->foreignId('alquiler_id')->constrained('alquilers')->onDelete('cascade');
+            $table->foreignId('disfraz_id')->constrained('disfrazs')->onDelete('cascade');
+            $table->integer('cantidad')->default(1);
+            $table->decimal('precio_unitario', 10, 2);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('piezas');
+        Schema::dropIfExists('alquiler_disfraz');
     }
 };

@@ -1,5 +1,5 @@
 @extends('template')
-@section('title', 'ventas')
+@section('title', 'alquilers')
 @push('css')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -26,14 +26,14 @@
         </script>
     @endif
     <div class="container-fluid px-4">
-        <h1 class="mt-4 text-center">Ventas</h1>
+        <h1 class="mt-4 text-center">Alquiler</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-            <li class="breadcrumb-item active">Ventas</li>
+            <li class="breadcrumb-item active">Alquiler</li>
         </ol>
 
         <div class="mb-4">
-            <a href="{{ route('ventas.create') }}">
+            <a href="{{ route('alquilers.create') }}">
                 <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
             </a>
         </div>
@@ -41,7 +41,7 @@
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Tabla ventas
+                Tabla alquiler
             </div>
             <div class="card-body">
                 <table id="datatablesSimple" class="table table-striped">
@@ -56,7 +56,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($ventas as $item)
+                        @foreach ($alquilers as $item)
                             <tr>
                                 <td>
                                     <p class="fw-semibold mb-1">{{ $item->garantia->tipo_garantia }}</p>
@@ -85,7 +85,7 @@
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-                                        <form action="{{ route('ventas.show', ['venta' => $item]) }}" method="get">
+                                        <form action="{{ route('alquilers.show', ['venta' => $item]) }}" method="get">
                                             <button type="submit" class="btn btn-success">
                                                 Ver
                                             </button>
@@ -112,7 +112,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cerrar</button>
-                                            <form action="{{ route('ventas.destroy', ['venta' => $item->id]) }}"
+                                            <form action="{{ route('alquilers.destroy', ['venta' => $item->id]) }}"
                                                 method="post">
                                                 @method('DELETE')
                                                 @csrf
@@ -132,5 +132,4 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 @endpush

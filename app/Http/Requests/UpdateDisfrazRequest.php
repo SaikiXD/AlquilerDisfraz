@@ -23,34 +23,31 @@ class UpdateDisfrazRequest extends FormRequest
     {
         $disfraz = $this->route('disfraz');
         return [
-            'nombre' => 'required|unique:disfrazs,nombre,' . $disfraz->id . '|max:255',
-            'nroPiezas' => 'required|integer',
-            'cantidad' => 'required|integer',
-            'descripcion' => 'nullable|string',
+            /*'nombre' => 'required|unique:disfrazs,nombre,' . $disfraz->id . '|max:80',
+            'descripcion' => 'nullable|max:255',
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'color' => 'required|string|max:255',
-            'edad_min' => 'required|integer|min:3',
-            'edad_max' => 'required|integer|min:3',
-            'precio' => 'required|numeric|min:0|max:100000',
             'genero' => 'required|string|max:255',
-            'categorias' => 'required'
+            'categorias' => 'required'*/
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string|max:1000',
+            'genero' => 'required|in:masculino,femenino,unisex',
+            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'precio' => 'required|numeric|min:0',
+
+            'categorias' => 'required|array',
+            'categorias.*' => 'exists:categorias,id'
         ];
     }
-    public function attributes()
+    public function messages(): array
     {
         return [
-            'nroPiezas' => 'piezas',
-            'edad_min' => 'edad minima',
-            'edad_max' => 'edad maxima'
+            'nombre.required' => 'El nombre del disfraz es obligatorio.',
+            'genero.required' => 'El género es obligatorio.',
+            'img_path.image' => 'El archivo debe ser una imagen válida.',
+            'img_path.mimes' => 'La imagen debe estar en formato: jpeg, png, jpg o gif.',
+            'precio.required' => 'El precio es obligatorio.',
+            'categorias.required' => 'Debe seleccionar al menos una categoría.',
+            'categorias.*.exists' => 'La categoría seleccionada no es válida.',
         ];
-    }
-    public function withValidator($validacion)
-    {
-        $validacion->after(function ($validacion) {
-            if ($this->edad_min >= $this->edad_max) {
-                $validacion->errors()->add('edad_min', 'La edad mínima debe ser menor que la edad máxima.');
-                $validacion->errors()->add('edad_max', 'La edad máxima debe ser mayor que la edad mínima.');
-            }
-        });
     }
 }

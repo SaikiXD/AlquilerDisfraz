@@ -2,13 +2,13 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
-                <div class="sb-sidenav-menu-heading">Inicio/div>
-                    <a class="nav-link" href="{{ route('panel') }}">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Panel
-                    </a>
+                <div class="sb-sidenav-menu-heading">Inicio</div>
+                <a class="nav-link" href="{{ route('panel') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Panel
+                </a>
 
-                    <!---div class="sb-sidenav-menu-heading">Interface</!---div>
+                <!---div class="sb-sidenav-menu-heading">Interface</!---div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Layouts
@@ -51,38 +51,37 @@
                                     </div>
                                 </nav>
                             </div--->
-                    <div class="sb-sidenav-menu-heading">Modulos</div>
-                    <!----categoria---->
-                    <a class="nav-link" href="{{ route('categorias.index') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
-                        Categorias
-                    </a>
-                    <!----pieza---->
-                    <a class="nav-link" href="{{ route('piezas.index') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
-                        Piezas
-                    </a>
-                    <!----disfraz---->
-                    <a class="nav-link" href="{{ route('disfrazs.index') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-shirt"></i></div>
-                        Disfraces
-                    </a>
-                    <!----cliente---->
-                    <a class="nav-link" href="{{ route('clientes.index') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
-                        Clientes
-                    </a>
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                        data-bs-target="#collapseVentas" aria-expanded="false" aria-controls="collapseLayouts">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
-                        Alquiler
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                </div>
+                <div class="sb-sidenav-menu-heading">Modulos</div>
+                <!----cliente---->
+                <a class="nav-link" href="{{ route('clientes.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                    Clientes
+                </a>
+                <!----categoria---->
+                <a class="nav-link" href="{{ route('categorias.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
+                    Categorias
+                </a>
+                <!----pieza---->
+                <a class="nav-link" href="{{ route('piezas.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-cubes"></i></div>
+                    Piezas
+                </a>
+                <!----disfraz---->
+                <a class="nav-link" href="{{ route('disfrazs.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-shirt"></i></div>
+                    Disfraces
+                </a>
+                <!--Alquieler-->
+                <a class="nav-link" href="{{ route('alquilers.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    Alquileres
+                </a>
             </div>
-            <div class="sb-sidenav-footer">
-                <div class="small">Bienvenido:</div>
-                Start Bootstrap
-            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Bienvenido:</div>
+            Start Bootstrap
+        </div>
     </nav>
 </div>

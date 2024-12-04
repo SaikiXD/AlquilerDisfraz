@@ -24,7 +24,13 @@ class StorePiezaRequest extends FormRequest
         return [
 
             'nombre' => 'required|max:255|unique:piezas,nombre',
-            'tipo' => 'required|string'
+            'tipo_id' => 'required|integer|exists:tipos,id'
+        ];
+    }
+    public function attributes()
+    {
+        return [
+            'tipo_id' => 'tipo'
         ];
     }
     public function messages()
