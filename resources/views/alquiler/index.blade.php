@@ -59,11 +59,10 @@
                         @foreach ($alquilers as $item)
                             <tr>
                                 <td>
-                                    <p class="fw-semibold mb-1">{{ $item->garantia->tipo_garantia }}</p>
-                                    <p class="text-muted mb-0">{{ $item->valor_garantia }}</p>
+                                    <p class="fw-semibold mb-1">{{ $item->tipo_garantia }}</p>
                                 </td>
                                 <td>
-                                    <p class="text-muted mb-0">{{ $item->cliente->persona->nombre }}</p>
+                                    <p class="text-muted mb-0">{{ $item->cliente->nombre }}</p>
                                 </td>
                                 <td>
                                     <div class="row-not-space">
@@ -85,7 +84,7 @@
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-                                        <form action="{{ route('alquilers.show', ['venta' => $item]) }}" method="get">
+                                        <form action="" method="get">
                                             <button type="submit" class="btn btn-success">
                                                 Ver
                                             </button>
@@ -112,8 +111,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Cerrar</button>
-                                            <form action="{{ route('alquilers.destroy', ['venta' => $item->id]) }}"
-                                                method="post">
+                                            <form action="" method="post">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger">Confirmar</button>

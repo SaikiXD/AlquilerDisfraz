@@ -31,17 +31,11 @@ class Disfraz extends Model
         return $this->belongsToMany(Categoria::class)
             ->withTimestamps();
     }
-    public function clientes()
+    public function alquilers()
     {
-        return $this->belongsToMany(Cliente::class)->withTimestamps()
-            ->withPivot(
-                'img_path',
-                'descripcion_garantia',
-                'valor_garantia',
-                'cantidad',
-                'fecha_alquiler',
-                'fecha_devolucion'
-            );
+        return $this->belongsToMany(Alquiler::class)
+            ->withTimestamps()
+            ->withPivot('cantidad', 'precio_unitario');
     }
     public function hanbleUploadImage($image)
     {

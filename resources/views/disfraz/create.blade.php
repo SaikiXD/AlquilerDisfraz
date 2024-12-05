@@ -314,7 +314,7 @@
                 $('#tabla_detalle tbody').append(fila);
 
                 // Limpiar campos
-                $('#tipo_id').val('').selectpicker();
+                $('#tipo_id').val('').selectpicker('val', '').selectpicker('render');
                 $('#pieza_id').empty().append('<option value="">Seleccione una pieza</option>');
                 $('#cantidad').val('');
                 $('#color').val('');

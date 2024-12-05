@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('alquiler_id')->constrained('alquilers')->onDelete('cascade');
             $table->foreignId('disfraz_id')->constrained('disfrazs')->onDelete('cascade');
-            $table->integer('cantidad')->default(1);
+            $table->integer('cantidad');
             $table->decimal('precio_unitario', 10, 2);
             $table->timestamps();
         });

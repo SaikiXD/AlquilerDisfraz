@@ -9,7 +9,7 @@ class Cliente extends Model
 {
     use HasFactory;
 
-    public function alquiler()
+    public function alquilers()
     {
         return $this->hasMany(Alquiler::class);
     }
